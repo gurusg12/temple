@@ -133,12 +133,12 @@ const Home = () => {
 
         <div className="max-w-6xl mx-auto px-6 grid sm:grid-cols-2 md:grid-cols-3 gap-8">
           {[
-            '/images/temple1.jpg',
-            '/images/temple2.jpg',
-            '/images/temple3.jpg',
-            '/images/temple4.jpg',
-            '/images/temple5.jpg',
-            '/images/temple6.jpg',
+            'https://tse2.mm.bing.net/th/id/OIP.8aQcwUnp4NEwSYkX2jWbigHaE8?pid=Api&P=0&h=180',
+            'https://tse2.mm.bing.net/th/id/OIP.oyuAXoKuyovVrrRZ9eEGwwHaE8?pid=Api&P=0&h=180',
+            'https://tse2.mm.bing.net/th/id/OIP.rteukiff2ELrj-UzX8s5AQHaD3?pid=Api&P=0&h=180',
+            'https://tse1.mm.bing.net/th/id/OIP.WaEhCCyt0mBuYBZnhFl09AHaEW?pid=Api&P=0&h=180',
+            'https://tse4.mm.bing.net/th/id/OIP.c36Grb3yFiLlSI55Ac9OjAHaE8?pid=Api&P=0&h=180',
+            'https://tse3.mm.bing.net/th/id/OIP.rzTmAmMIUxxvVmLOVsBppAHaEj?pid=Api&P=0&h=180',
           ].map((img, index) => (
             <div
               key={index}
