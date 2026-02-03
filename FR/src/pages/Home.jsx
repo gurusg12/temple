@@ -17,8 +17,8 @@ const Home = () => {
             start: 'top 80%',
           },
           opacity: 0,
-          y: 40,
-          duration: 1,
+          y: 50,
+          duration: 1.2,
           ease: 'power3.out',
         });
       });
@@ -30,22 +30,28 @@ const Home = () => {
           start: 'top 80%',
         },
         opacity: 0,
-        y: 50,
-        duration: 1,
+        y: 60,
+        duration: 1.3,
         ease: 'power3.out',
       });
 
-      // Gallery images staggered reveal
+      // Gallery cards — smooth 3D entrance
       gsap.from(imagesRef.current, {
         scrollTrigger: {
           trigger: galleryRef.current,
-          start: 'top 70%',
+          start: 'top 75%',
         },
         opacity: 0,
-        scale: 0.85,
-        y: 40,
-        stagger: 0.2,
-        duration: 0.9,
+        y: 80,
+        scale: 0.88,
+        rotationX: 15,
+        rotationY: -8,
+        transformOrigin: 'center center',
+        stagger: {
+          amount: 0.45,
+          from: 'center',
+        },
+        duration: 1.4,
         ease: 'power3.out',
       });
     });
@@ -53,7 +59,7 @@ const Home = () => {
     return () => ctx.revert();
   }, []);
 
-  // High-quality temple images (free to use commercially)
+  // High-quality temple images
   const templeImages = [
     "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80",
     "https://images.unsplash.com/photo-1580130718646-9f694209b207?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80",
@@ -65,7 +71,7 @@ const Home = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-100 text-gray-900">
-      {/* Hero Section */}
+      {/* Hero */}
       <section className="bg-gradient-to-r from-orange-700 to-red-800 text-white py-24 text-center">
         <h1 className="text-5xl md:text-6xl font-bold tracking-wide">
           Sri Mahalakshmi Temple
@@ -129,32 +135,43 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Gallery */}
+      {/* Gallery – 3D style */}
       <section ref={galleryRef} className="py-20 bg-gradient-to-b from-orange-50 to-orange-100">
         <h2 className="gallery-title text-4xl md:text-5xl font-bold text-center text-orange-800 mb-16 tracking-tight">
           Temple Gallery
         </h2>
 
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
           {templeImages.map((img, index) => (
             <div
               key={index}
               ref={(el) => (imagesRef.current[index] = el)}
-              className="group relative overflow-hidden rounded-2xl shadow-xl aspect-[4/3] bg-gray-200 cursor-pointer"
+              className="group relative rounded-2xl overflow-hidden shadow-2xl bg-gray-200 transition-all duration-700 ease-out perspective-[1200px]"
+              style={{ transformStyle: 'preserve-3d' }}
             >
+              {/* Main image */}
               <img
                 src={img}
                 alt={`Sri Mahalakshmi Temple Gallery ${index + 1}`}
                 loading="lazy"
-                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.04]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
-              <div className="absolute bottom-0 left-0 right-0 p-6 text-white translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
-                <p className="text-lg font-semibold drop-shadow-lg">
-                  Sri Mahalakshmi Temple
-                </p>
-                <p className="text-sm opacity-90">Divine Blessings & Serenity</p>
+
+              {/* 3D shine overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+              {/* Hover 3D tilt container */}
+              <div
+                className="absolute inset-0 transition-transform duration-500 ease-out group-hover:rotate-x-[8deg] group-hover:rotate-y-[10deg] group-hover:scale-105 group-hover:shadow-2xl"
+                style={{ transformStyle: 'preserve-3d' }}
+              >
+                {/* Bottom caption */}
+                <div className="absolute bottom-0 left-0 right-0 p-6 text-white bg-gradient-to-t from-black/80 to-transparent translate-y-6 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-600">
+                  <p className="text-lg font-semibold drop-shadow-lg">
+                    Sri Mahalakshmi Temple
+                  </p>
+                  <p className="text-sm opacity-90">Divine & Serene</p>
+                </div>
               </div>
             </div>
           ))}
