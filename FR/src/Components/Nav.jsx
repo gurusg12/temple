@@ -44,7 +44,7 @@ const Nav = () => {
           Home
         </NavLink>
         <span className="cursor-pointer hover:text-yellow-300 transition">
-          ETC
+          Guides
         </span>
       </div>
 
@@ -59,10 +59,10 @@ const Nav = () => {
           className="flex-1 px-3 py-1 rounded bg-slate-200 text-gray-900 placeholder:text-gray-500 outline-none"
         />
         <span className="text-white cursor-pointer hover:text-orange-400 transition">
-          Any
+          Mythology
         </span>
         <span className="text-white cursor-pointer hover:text-orange-400 transition">
-          Chatrapati
+          Tools
         </span>
       </div>
 
