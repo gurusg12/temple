@@ -59,7 +59,7 @@ const Home = () => {
     'https://images.unsplash.com/photo-1590073844006-33379778ae09?w=900',
     
     // Temple interior / lamps / devotion feel
-    'https://images.unsplash.com/photo-1601024445123-6a6a1f6e1e6e?w=900',
+    'https://tse2.mm.bing.net/th/id/OIP.AE4IlLoNdQSWdCBcqI1MlAHaEK?pid=Api&P=0&h=180',
     'https://images.pexels.com/photos/594610/pexels-photo-594610.jpeg?w=900',
     'https://images.pexels.com/photos/1391639/pexels-photo-1391639.jpeg?w=900',
   ];
