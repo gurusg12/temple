@@ -3,28 +3,31 @@ import React, { useState } from 'react';
 function WebApp() {
   const [loading, setLoading] = useState(false);
 
-  const handleFetchAndPrint = async () => {
+ const handleFetchAndPrint = async () => {
     setLoading(true);
     try {
-      // 1. Fetch real data from your Render Backend (DB)
       const response = await fetch('https://backend-bt-cd08.onrender.com/get-latest-order');
-      const realData = await response.json();
-
-      if (!realData) throw new Error("No data found");
-
-      // 2. Encode the data for the URL Scheme
-      const encodedData = encodeURIComponent(JSON.stringify(realData));
       
-      // 3. Jump to the Native App
+      // Check if the server returned an error (like 404 or 500)
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}. Check if the URL is correct.`);
+      }
+
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Server did not return JSON. It returned HTML/Text instead.");
+      }
+
+      const realData = await response.json();
+      const encodedData = encodeURIComponent(JSON.stringify(realData));
       window.location.href = `miterprint://${encodedData}`;
       
     } catch (err) {
-      alert("Error: " + err.message);
+      alert("Print Error: " + err.message);
     } finally {
       setLoading(false);
     }
-  };
-
+};
   return (
     <div style={{ padding: '50px', textAlign: 'center', backgroundColor: '#111', color: '#fff', minHeight: '100vh' }}>
       <h2>Miter Web Terminal</h2>
