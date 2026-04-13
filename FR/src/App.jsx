@@ -1,52 +1,41 @@
 import React, { useState } from 'react';
 
-function App() {
-  const [status, setStatus] = useState('Idle');
+const RENDER_URL = "https://backend-bt-cd08.onrender.com";
 
-  // IMPORTANT: Since Vercel is HTTPS and your local backend is HTTP,
-  // some browsers might block this. Use your computer's public IP or 
-  // a tool like Ngrok if testing from a different network.
-  // In your Website App.js
-const URL = "https://backend-bt-cd08.onrender.com/trigger-print";
+function Website() {
+  const [loading, setLoading] = useState(false);
 
-const handlePrintTrigger = async () => {
-  setStatus('Queueing Job...');
-  try {
-    const response = await fetch(URL); // This tells Render "I have a job!"
-    if (response.ok) {
-      setStatus('Success! Waiting for Printer...');
+  const startAutoPrintProcess = async () => {
+    setLoading(true);
+    try {
+      // 1. Fetch data from DB (via Render)
+      const dbResponse = await fetch(`${RENDER_URL}/get-db-data`);
+      const dataFromDB = await dbResponse.json();
+
+      // 2. Immediately send it back to the "App Mailbox"
+      await fetch(`${RENDER_URL}/push-to-app`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dataFromDB)
+      });
+
+      alert("Data fetched from DB and sent to local App!");
+    } catch (e) {
+      alert("Error in bridge");
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    setStatus('Error connecting to Render');
-  }
-};
+  };
 
   return (
-    <div style={{ padding: '50px', textAlign: 'center', backgroundColor: '#121212', color: 'white', minHeight: '100vh' }}>
-      <h1>Miter Web Terminal</h1>
-      <p>Status: <strong>{status}</strong></p>
-      
+    <div style={{ textAlign: 'center', padding: '50px' }}>
       <button 
-        onClick={handlePrintTrigger}
-        style={{
-          padding: '15px 30px',
-          fontSize: '18px',
-          backgroundColor: '#22c55e',
-          color: 'white',
-          border: 'none',
-          borderRadius: '8px',
-          cursor: 'pointer'
-        }}
+        onClick={startAutoPrintProcess}
+        style={{ padding: '20px', background: 'blue', color: 'white' }}
       >
-        🖨️ Click to Print Receipt
+        {loading ? "Processing..." : "Fetch DB & Print"}
       </button>
-
-      <div style={{ marginTop: '20px', color: '#64748b' }}>
-        <p>This website sends data to your local backend at:</p>
-        <code>{LOCAL_BACKEND_URL}</code>
-      </div>
     </div>
   );
 }
-
-export default App;
+export default Website;
