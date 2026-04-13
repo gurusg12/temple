@@ -7,7 +7,7 @@ function App() {
     setLoading(true);
     try {
       const response = {
-        Company : "Photon" , Place : "sindagi" , Mobile:9632367397
+        company : "Photon" , place : "sindagi" , mobile:"9632367397"
       }
       
       // // Check if the server returned an error (like 404 or 500)
