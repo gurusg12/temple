@@ -6,7 +6,7 @@ function App() {
   // IMPORTANT: Since Vercel is HTTPS and your local backend is HTTP,
   // some browsers might block this. Use your computer's public IP or 
   // a tool like Ngrok if testing from a different network.
-  const LOCAL_BACKEND_URL = "http://YOUR_LAPTOP_IP:3000/print-job";
+  const LOCAL_BACKEND_URL = "http://192.168.0.6:3000/print-job";
 
   const handlePrintTrigger = async () => {
     setStatus('Sending Print Command...');
