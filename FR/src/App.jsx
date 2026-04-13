@@ -6,22 +6,20 @@ function App() {
   // IMPORTANT: Since Vercel is HTTPS and your local backend is HTTP,
   // some browsers might block this. Use your computer's public IP or 
   // a tool like Ngrok if testing from a different network.
-  const LOCAL_BACKEND_URL = "https://backend-bt-cd08.onrender.com/print-job";
+  // In your Website App.js
+const URL = "https://backend-bt-cd08.onrender.com/trigger-print";
 
-  const handlePrintTrigger = async () => {
-    setStatus('Sending Print Command...');
-    try {
-      // We call the backend to "queue" the data
-      const response = await fetch(LOCAL_BACKEND_URL);
-      if (response.ok) {
-        setStatus('Print Job Sent to Backend!');
-        alert("Print command sent to your local server!");
-      }
-    } catch (error) {
-      setStatus('Error: Could not reach backend');
-      console.error(error);
+const handlePrintTrigger = async () => {
+  setStatus('Queueing Job...');
+  try {
+    const response = await fetch(URL); // This tells Render "I have a job!"
+    if (response.ok) {
+      setStatus('Success! Waiting for Printer...');
     }
-  };
+  } catch (error) {
+    setStatus('Error connecting to Render');
+  }
+};
 
   return (
     <div style={{ padding: '50px', textAlign: 'center', backgroundColor: '#121212', color: 'white', minHeight: '100vh' }}>
