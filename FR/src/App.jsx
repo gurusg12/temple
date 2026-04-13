@@ -1,57 +1,41 @@
 import React, { useState } from 'react';
 
-function App() {
-  const [status, setStatus] = useState('Idle');
+function WebApp() {
+  const [loading, setLoading] = useState(false);
 
-  const fetchAndPrint = async () => {
-    setStatus('Fetching from Backend...');
+  const handleFetchAndPrint = async () => {
+    setLoading(true);
     try {
-      // 1. FETCH ACTUAL DATA FROM YOUR BACKEND
-      // Replace this URL with your actual database fetch endpoint
-      const response = await fetch('https://backend-bt-cd08.onrender.com/get-latest-order'); 
-      const dbData = await response.json();
+      // 1. Fetch real data from your Render Backend (DB)
+      const response = await fetch('https://backend-bt-cd08.onrender.com/get-latest-order');
+      const realData = await response.json();
 
-      if (!dbData) {
-        setStatus('No data found in DB');
-        return;
-      }
+      if (!realData) throw new Error("No data found");
 
-      setStatus('Data Fetched! Sending to App...');
-
-      // 2. CONVERT DB DATA TO LOCAL LINK
-      const encodedData = encodeURIComponent(JSON.stringify(dbData));
+      // 2. Encode the data for the URL Scheme
+      const encodedData = encodeURIComponent(JSON.stringify(realData));
       
-      // 3. TRIGGER LOCAL APP (This jumps to your React Native App)
+      // 3. Jump to the Native App
       window.location.href = `miterprint://${encodedData}`;
       
-      setStatus('Sent to Printer');
-    } catch (error) {
-      console.error(error);
-      setStatus('Error fetching data');
+    } catch (err) {
+      alert("Error: " + err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div style={{ textAlign: 'center', padding: '50px', background: '#121212', color: 'white', minHeight: '100vh' }}>
-      <h1>Miter Terminal</h1>
-      <p>Status: <strong>{status}</strong></p>
-      
+    <div style={{ padding: '50px', textAlign: 'center', backgroundColor: '#111', color: '#fff', minHeight: '100vh' }}>
+      <h2>Miter Web Terminal</h2>
       <button 
-        onClick={fetchAndPrint}
-        style={{
-          padding: '20px 40px',
-          fontSize: '18px',
-          backgroundColor: '#22c55e',
-          color: 'white',
-          border: 'none',
-          borderRadius: '8px',
-          cursor: 'pointer'
-        }}
+        onClick={handleFetchAndPrint}
+        style={{ padding: '20px 40px', fontSize: '18px', backgroundColor: '#22c55e', color: 'white', borderRadius: '10px', border: 'none' }}
       >
-        🖨️ Fetch from DB & Print
+        {loading ? 'Fetching DB...' : '🖨️ Print Latest Order'}
       </button>
     </div>
   );
 }
 
-export default App;
+export default WebApp;
