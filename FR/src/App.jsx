@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 
-function WebApp() {
+function App() {
   const [loading, setLoading] = useState(false);
 
  const handleFetchAndPrint = async () => {
     setLoading(true);
     try {
-      const response = await fetch('https://backend-bt-cd08.onrender.com/get-latest-order');
+      const response = {
+        Company : "Photon" , Place : "sindagi" , Mobile:9632367397
+      }
       
       // Check if the server returned an error (like 404 or 500)
       if (!response.ok) {
@@ -41,4 +43,4 @@ function WebApp() {
   );
 }
 
-export default WebApp;
+export default App;
