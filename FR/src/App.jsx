@@ -6,23 +6,20 @@ function App() {
  const handleFetchAndPrint = async () => {
     setLoading(true);
     try {
-      const response = {
-        company : "Photon" , place : "sindagi" , mobile:"9632367397"
-      }
-      
-      // // Check if the server returned an error (like 404 or 500)
-      // if (!response.ok) {
-      //   throw new Error(`Server error: ${response.status}. Check if the URL is correct.`);
-      // }
+ const data = {
+  company: "Photon",
+  place: "Sindagi",
+  mobile: "9632367397",
+};
 
-      // const contentType = response.headers.get("content-type");
-      // if (!contentType || !contentType.includes("application/json")) {
-      //   throw new Error("Server did not return JSON. It returned HTML/Text instead.");
-      // }
+console.log("Sending:", data);
 
-      // const realData = await response.json();
-      const encodedData = encodeURIComponent(JSON.stringify(response));
-      window.location.href = `miterprint://${encodedData}`;
+const encodedData = encodeURIComponent(JSON.stringify(data));
+const url = `miterprint://${encodedData}`;
+
+console.log("URL:", url);
+
+window.location.href = url;
       
     } catch (err) {
       alert("Print Error: " + err.message);
@@ -35,7 +32,7 @@ function App() {
       <h2>Miter Web Terminal</h2>
       <button 
         onClick={handleFetchAndPrint}
-        style={{ padding: '20px 40px', fontSize: '18px', backgroundColor: 'red', color: 'white', borderRadius: '10px', border: 'none' }}
+        style={{ padding: '20px 40px', fontSize: '18px', backgroundColor: 'blue', color: 'white', borderRadius: '10px', border: 'none' }}
       >
         {loading ? 'Fetching DB...' : '🖨️ Print Latest Order'}
       </button>
