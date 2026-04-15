@@ -1,54 +1,51 @@
 import React, { useState } from 'react';
 
-function App() {
-  const [loading, setLoading] = useState(false);
+function WebTerminal() {
+  const [smsPhone, setSmsPhone] = useState('');
+  const [smsMsg, setSmsMsg] = useState('');
 
-  const handleFetchAndPrint = async () => {
-    setLoading(true);
+  const handlePrint = () => {
+    const data = { company: "Photon", place: "Sindagi", total: "₹500" };
+    window.location.href = `miterprint://${encodeURIComponent(JSON.stringify(data))}`;
+  };
 
-    try {
-      const data = {
-        company: "Photon",
-        place: "Sindagi",
-        mobile: "9632367397"
-      };
-
-
-      console.log("DATA:", data);
-
-      const encodedData = encodeURIComponent(JSON.stringify(data));
-      const url = `miterprint://${encodedData}`;
-
-      console.log("URL:", url);
-
-      window.location.href = url;
-
-    } catch (err) {
-      alert("Print Error: " + err.message);
-    } finally {
-      setLoading(false);
-    }
+  const handleSMS = () => {
+    if(!smsPhone || !smsMsg) return alert("Fill number and message");
+    const data = { phoneNumber: smsPhone, message: smsMsg };
+    window.location.href = `mitersms://${encodeURIComponent(JSON.stringify(data))}`;
   };
 
   return (
-    <div style={{ padding: '50px', textAlign: 'center', backgroundColor: 'green', color: '#fff', minHeight: '100vh' }}>
-      <h2>Miter Web Terminal</h2>
+    <div style={{ padding: '40px', fontFamily: 'sans-serif', textAlign: 'center', backgroundColor: '#f0f2f5', minHeight: '100vh' }}>
+      <h1>Miter Web Terminal</h1>
 
-      <button 
-        onClick={handleFetchAndPrint}
-        style={{
-          padding: '20px 40px',
-          fontSize: '18px',
-          backgroundColor: 'red',
-          color: 'white',
-          borderRadius: '10px',
-          border: 'none'
-        }}
-      >
-        {loading ? 'Fetching DB...' : '🖨️ Print Latest Order'}
-      </button>
+      <div style={{ background: '#fff', padding: '20px', margin: '20px auto', maxWidth: '400px', borderRadius: '10px' }}>
+        <h3>Printer Control</h3>
+        <button onClick={handlePrint} style={{ background: '#2563eb', color: '#fff', padding: '10px 20px', border: 'none', cursor: 'pointer' }}>
+          🖨️ Print Latest Order
+        </button>
+      </div>
+
+      <div style={{ background: '#fff', padding: '20px', margin: '20px auto', maxWidth: '400px', borderRadius: '10px' }}>
+        <h3>SMS Control</h3>
+        <input 
+          placeholder="Phone Number" 
+          value={smsPhone} 
+          onChange={(e) => setSmsPhone(e.target.value)}
+          style={{ width: '90%', padding: '10px', marginBottom: '10px' }}
+        />
+        <textarea 
+          placeholder="Message content..." 
+          value={smsMsg} 
+          onChange={(e) => setSmsMsg(e.target.value)}
+          style={{ width: '90%', padding: '10px', marginBottom: '10px' }}
+        />
+        <button onClick={handleSMS} style={{ background: '#ef4444', color: '#fff', padding: '10px 20px', border: 'none', cursor: 'pointer' }}>
+          💬 Send SMS via Mobile
+        </button>
+      </div>
     </div>
   );
 }
 
-export default App;
+export default WebTerminal;
