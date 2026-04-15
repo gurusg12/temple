@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function WebTerminal() {
+function App() {
   const [smsPhone, setSmsPhone] = useState('');
   const [smsMsg, setSmsMsg] = useState('');
 
@@ -48,4 +48,4 @@ function WebTerminal() {
   );
 }
 
-export default WebTerminal;
+export default App;
