@@ -1,90 +1,97 @@
 import React, { useState } from 'react';
 
-const App = () => {
-  const [smsPhone, setSmsPhone] = useState('');
-  const [smsMsg, setSmsMsg] = useState('');
+function App() {
+  const [loading, setLoading] = useState(false);
 
-  // Triggers the Silent Background SMS on the Phone
-  const handleSilentSMS = () => {
-    if (!smsPhone || !smsMsg) {
-      return alert("Please enter both phone number and message.");
+  const triggerAction = (actionType) => {
+    setLoading(true);
+
+    try {
+      let payload = {};
+
+      if (actionType === 'print') {
+        payload = {
+          company: "Photon",
+          place: "Sindagi",
+          mobile: "9632367397",
+          orderId: "ORD-" + Date.now(),
+          amount: "450.00",
+          action: "print"
+        };
+      } else if (actionType === 'sms') {
+        const number = prompt("Enter Mobile Number (with country code if needed):");
+        const message = prompt("Enter Message to Send:");
+
+        if (!number || !message) {
+          setLoading(false);
+          return;
+        }
+
+        payload = {
+          number: number,
+          message: message,
+          action: "sms"
+        };
+      }
+
+      const encodedData = encodeURIComponent(JSON.stringify(payload));
+      const url = `miterprint://${encodedData}`;
+
+      console.log("Opening Deep Link:", url);
+      window.location.href = url;
+
+    } catch (err) {
+      alert("Error: " + err.message);
+    } finally {
+      setLoading(false);
     }
-
-    // This object structure must match the mobile app's data.phoneNumber / data.message
-    const smsData = {
-      phoneNumber: smsPhone,
-      message: smsMsg
-    };
-
-    const encodedData = encodeURIComponent(JSON.stringify(smsData));
-    const finalUrl = `mitersms://${encodedData}`;
-
-    console.log("Triggering Deep Link:", finalUrl);
-    window.location.href = finalUrl;
-  };
-
-  // Triggers the Printer on the Phone
-  const handlePrint = () => {
-    const printData = {
-      title: "MITER BILL",
-      item: "Software Service",
-      amount: "₹1500",
-      status: "PAID"
-    };
-
-    const encodedData = encodeURIComponent(JSON.stringify(printData));
-    window.location.href = `miterprint://${encodedData}`;
   };
 
   return (
-    <div style={styles.page}>
-      <div style={styles.container}>
-        <h1 style={styles.title}>Miter Web Terminal</h1>
-        <p style={styles.subtitle}>Control your mobile hardware from the browser</p>
+    <div style={{ padding: '50px', textAlign: 'center', backgroundColor: '#111827', color: '#fff', minHeight: '100vh' }}>
+      <h1>Miter Web Terminal</h1>
+      <p style={{ marginBottom: 40 }}>Click buttons to Print or Send SMS via the Android Bridge App</p>
 
-        {/* SMS SECTION */}
-        <div style={styles.card}>
-          <h2 style={styles.cardTitle}>Background SMS</h2>
-          <input
-            type="text"
-            placeholder="Phone Number (e.g. 91...)"
-            value={smsPhone}
-            onChange={(e) => setSmsPhone(e.target.value)}
-            style={styles.input}
-          />
-          <textarea
-            placeholder="Message content..."
-            value={smsMsg}
-            onChange={(e) => setSmsMsg(e.target.value)}
-            style={{ ...styles.input, height: '80px', resize: 'none' }}
-          />
-          <button onClick={handleSilentSMS} style={styles.smsButton}>
-            🚀 Send SMS Silently
-          </button>
-        </div>
+      <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
+        <button
+          onClick={() => triggerAction('print')}
+          disabled={loading}
+          style={{
+            padding: '20px 40px',
+            fontSize: '18px',
+            backgroundColor: '#2563eb',
+            color: 'white',
+            borderRadius: '10px',
+            border: 'none',
+            cursor: 'pointer'
+          }}
+        >
+          {loading ? 'Processing...' : '🖨️ Print Latest Order'}
+        </button>
 
-        {/* PRINTER SECTION */}
-        <div style={styles.card}>
-          <h2 style={styles.cardTitle}>Printer Control</h2>
-          <button onClick={handlePrint} style={styles.printButton}>
-            🖨️ Print Test Receipt
-          </button>
-        </div>
+        <button
+          onClick={() => triggerAction('sms')}
+          disabled={loading}
+          style={{
+            padding: '20px 40px',
+            fontSize: '18px',
+            backgroundColor: '#eab308',
+            color: 'black',
+            borderRadius: '10px',
+            border: 'none',
+            cursor: 'pointer'
+          }}
+        >
+          📱 Send SMS in Background
+        </button>
       </div>
+
+      <p style={{ marginTop: 50, fontSize: '14px', opacity: 0.7 }}>
+        Note: Android app must be installed and printer connected for printing.<br />
+        SMS permission must be granted once in the app.
+      </p>
     </div>
   );
-};
-
-const styles = {
-  page: { backgroundColor: 'red', minHeight: '100vh', padding: '40px', fontFamily: 'sans-serif', color: 'white' },
-  container: { maxWidth: '500px', margin: '0 auto' },
-  title: { textAlign: 'center', fontSize: '2rem', marginBottom: '10px' },
-  subtitle: { textAlign: 'center', color: '#94a3b8', marginBottom: '40px' },
-  card: { backgroundColor: '#1e293b', padding: '25px', borderRadius: '15px', marginBottom: '20px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' },
-  cardTitle: { marginTop: 0, fontSize: '1.2rem', marginBottom: '15px', color: '#38bdf8' },
-  input: { width: '100%', padding: '12px', marginBottom: '15px', borderRadius: '8px', border: '1px solid #334155', backgroundColor: '#0f172a', color: 'white', boxSizing: 'border-box' },
-  smsButton: { width: '100%', padding: '15px', border: 'none', borderRadius: '8px', backgroundColor: '#ef4444', color: 'white', fontWeight: 'bold', cursor: 'pointer' },
-  printButton: { width: '100%', padding: '15px', border: 'none', borderRadius: '8px', backgroundColor: '#2563eb', color: 'white', fontWeight: 'bold', cursor: 'pointer' }
-};
+}
 
 export default App;
