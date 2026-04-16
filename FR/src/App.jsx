@@ -76,7 +76,7 @@ const App = () => {
 };
 
 const styles = {
-  page: { backgroundColor: '#0f172a', minHeight: '100vh', padding: '40px', fontFamily: 'sans-serif', color: 'white' },
+  page: { backgroundColor: 'red', minHeight: '100vh', padding: '40px', fontFamily: 'sans-serif', color: 'white' },
   container: { maxWidth: '500px', margin: '0 auto' },
   title: { textAlign: 'center', fontSize: '2rem', marginBottom: '10px' },
   subtitle: { textAlign: 'center', color: '#94a3b8', marginBottom: '40px' },
