@@ -17,7 +17,6 @@ function App() {
       alert("Enter number and message");
       return;
     }
-
     sendToApp({
       action: "sms",
       number,
@@ -31,7 +30,6 @@ function App() {
       alert("Enter print content");
       return;
     }
-
     sendToApp({
       action: "print",
       text: printText,
@@ -39,93 +37,68 @@ function App() {
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Miter Print Web Panel</h1>
+    <div className="min-h-screen bg-slate-900 text-white p-6 font-sans">
+      <div className="max-w-md mx-auto">
+        <h1 className="text-3xl font-bold text-center mb-8 text-blue-400">
+          Miter Print Web Panel
+        </h1>
 
-      {/* SMS SECTION */}
-      <div style={styles.card}>
-        <h2>Send SMS</h2>
+        {/* SMS SECTION */}
+        <div className="bg-slate-800 p-6 rounded-xl shadow-lg mb-6 border border-slate-700">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <span>📩</span> Send SMS
+          </h2>
 
-        <input
-          style={styles.input}
-          placeholder="Mobile Number"
-          value={number}
-          onChange={(e) => setNumber(e.target.value)}
-        />
+          <div className="space-y-4">
+            <input
+              type="text"
+              className="w-full p-3 rounded-lg bg-slate-50 text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+              placeholder="Mobile Number (e.g. +123456789)"
+              value={number}
+              onChange={(e) => setNumber(e.target.value)}
+            />
 
-        <textarea
-          style={styles.textarea}
-          placeholder="Message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
+            <textarea
+              className="w-full p-3 rounded-lg bg-slate-50 text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 outline-none transition-all min-h-[100px]"
+              placeholder="Type your message here..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
 
-        <button style={styles.button} onClick={handleSendSMS}>
-          Send SMS
-        </button>
-      </div>
+            <button
+              onClick={handleSendSMS}
+              className="w-full bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors shadow-md"
+            >
+              Send SMS
+            </button>
+          </div>
+        </div>
 
-      {/* PRINT SECTION */}
-      <div style={styles.card}>
-        <h2>Print Receipt</h2>
+        {/* PRINT SECTION */}
+        <div className="bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-700">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <span>🖨️</span> Print Receipt
+          </h2>
 
-        <textarea
-          style={styles.textarea}
-          placeholder="Enter print text..."
-          value={printText}
-          onChange={(e) => setPrintText(e.target.value)}
-        />
+          <div className="space-y-4">
+            <textarea
+              className="w-full p-3 rounded-lg bg-slate-50 text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 outline-none transition-all min-h-[120px]"
+              placeholder="Enter text to print..."
+              value={printText}
+              onChange={(e) => setPrintText(e.target.value)}
+            />
 
-        <button style={styles.button} onClick={handlePrint}>
-          Print
-        </button>
+            <button
+              onClick={handlePrint}
+              className="w-full bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold py-3 rounded-lg transition-colors shadow-md"
+            >
+              Print Now
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    padding: 30,
-    fontFamily: "Arial",
-    backgroundColor: "#0f172a",
-    minHeight: "100vh",
-    color: "white",
-  },
-  title: {
-    textAlign: "center",
-  },
-  card: {
-    backgroundColor: "#1e293b",
-    padding: 20,
-    borderRadius: 10,
-    marginTop: 20,
-  },
-  input: {
-    width: "100%",
-    padding: 10,
-    marginTop: 10,
-    borderRadius: 5,
-    border: "none",
-  },
-  textarea: {
-    width: "100%",
-    padding: 10,
-    marginTop: 10,
-    borderRadius: 5,
-    border: "none",
-    minHeight: 80,
-  },
-  button: {
-    marginTop: 15,
-    padding: 12,
-    width: "100%",
-    backgroundColor: "#2563eb",
-    color: "white",
-    border: "none",
-    borderRadius: 5,
-    cursor: "pointer",
-  },
-};
 
 export default App;
