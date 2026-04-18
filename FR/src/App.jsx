@@ -1,97 +1,131 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 function App() {
-  const [loading, setLoading] = useState(false);
+  const [number, setNumber] = useState("");
+  const [message, setMessage] = useState("");
+  const [printText, setPrintText] = useState("");
 
-  const triggerAction = (actionType) => {
-    setLoading(true);
+  // 🔗 Send Deep Link
+  const sendToApp = (data) => {
+    const url = `miterprint://${encodeURIComponent(JSON.stringify(data))}`;
+    window.location.href = url;
+  };
 
-    try {
-      let payload = {};
-
-      if (actionType === 'print') {
-        payload = {
-          company: "Photon",
-          place: "Sindagi",
-          mobile: "9632367397",
-          orderId: "ORD-" + Date.now(),
-          amount: "450.00",
-          action: "print"
-        };
-      } else if (actionType === 'sms') {
-        const number = prompt("Enter Mobile Number (with country code if needed):");
-        const message = prompt("Enter Message to Send:");
-
-        if (!number || !message) {
-          setLoading(false);
-          return;
-        }
-
-        payload = {
-          number: number,
-          message: message,
-          action: "sms"
-        };
-      }
-
-      const encodedData = encodeURIComponent(JSON.stringify(payload));
-      const url = `miterprint://${encodedData}`;
-
-      console.log("Opening Deep Link:", url);
-      window.location.href = url;
-
-    } catch (err) {
-      alert("Error: " + err.message);
-    } finally {
-      setLoading(false);
+  // 📩 Send SMS
+  const handleSendSMS = () => {
+    if (!number || !message) {
+      alert("Enter number and message");
+      return;
     }
+
+    sendToApp({
+      action: "sms",
+      number,
+      message,
+    });
+  };
+
+  // 🖨️ Send Print
+  const handlePrint = () => {
+    if (!printText) {
+      alert("Enter print content");
+      return;
+    }
+
+    sendToApp({
+      action: "print",
+      text: printText,
+    });
   };
 
   return (
-    <div style={{ padding: '50px', textAlign: 'center', backgroundColor: '#111827', color: '#fff', minHeight: '100vh' }}>
-      <h1>Miter Web Terminal</h1>
-      <p style={{ marginBottom: 40 }}>Click buttons to Print or Send SMS via the Android Bridge App</p>
+    <div style={styles.container}>
+      <h1 style={styles.title}>Miter Print Web Panel</h1>
 
-      <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
-        <button
-          onClick={() => triggerAction('print')}
-          disabled={loading}
-          style={{
-            padding: '20px 40px',
-            fontSize: '18px',
-            backgroundColor: '#2563eb',
-            color: 'white',
-            borderRadius: '10px',
-            border: 'none',
-            cursor: 'pointer'
-          }}
-        >
-          {loading ? 'Processing...' : '🖨️ Print Latest Order'}
-        </button>
+      {/* SMS SECTION */}
+      <div style={styles.card}>
+        <h2>Send SMS</h2>
 
-        <button
-          onClick={() => triggerAction('sms')}
-          disabled={loading}
-          style={{
-            padding: '20px 40px',
-            fontSize: '18px',
-            backgroundColor: '#eab308',
-            color: 'black',
-            borderRadius: '10px',
-            border: 'none',
-            cursor: 'pointer'
-          }}
-        >
-          📱 Send SMS in Background
+        <input
+          style={styles.input}
+          placeholder="Mobile Number"
+          value={number}
+          onChange={(e) => setNumber(e.target.value)}
+        />
+
+        <textarea
+          style={styles.textarea}
+          placeholder="Message"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+
+        <button style={styles.button} onClick={handleSendSMS}>
+          Send SMS
         </button>
       </div>
 
-      <p style={{ marginTop: 50, fontSize: '14px', opacity: 0.7 }}>
-        Note: Android app must be installed and printer connected for printing.<br />
-        SMS permission must be granted once in the app.
-      </p>
+      {/* PRINT SECTION */}
+      <div style={styles.card}>
+        <h2>Print Receipt</h2>
+
+        <textarea
+          style={styles.textarea}
+          placeholder="Enter print text..."
+          value={printText}
+          onChange={(e) => setPrintText(e.target.value)}
+        />
+
+        <button style={styles.button} onClick={handlePrint}>
+          Print
+        </button>
+      </div>
     </div>
   );
 }
+
+const styles = {
+  container: {
+    padding: 30,
+    fontFamily: "Arial",
+    backgroundColor: "#0f172a",
+    minHeight: "100vh",
+    color: "white",
+  },
+  title: {
+    textAlign: "center",
+  },
+  card: {
+    backgroundColor: "#1e293b",
+    padding: 20,
+    borderRadius: 10,
+    marginTop: 20,
+  },
+  input: {
+    width: "100%",
+    padding: 10,
+    marginTop: 10,
+    borderRadius: 5,
+    border: "none",
+  },
+  textarea: {
+    width: "100%",
+    padding: 10,
+    marginTop: 10,
+    borderRadius: 5,
+    border: "none",
+    minHeight: 80,
+  },
+  button: {
+    marginTop: 15,
+    padding: 12,
+    width: "100%",
+    backgroundColor: "#2563eb",
+    color: "white",
+    border: "none",
+    borderRadius: 5,
+    cursor: "pointer",
+  },
+};
 
 export default App;
